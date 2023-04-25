@@ -1,24 +1,36 @@
 import { authModalState } from "@/src/atoms/authModalAtom";
+import { auth } from "@/src/firebase/clientApp";
 import { Button, Flex, Input, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { useSetRecoilState } from "recoil";
 
 const Signup: React.FC = () => {
   const [signupForm, setSignupForm] = useState({
     email: "",
     password: "",
+    confirmPassword: "",
   });
+  const setAuthModalState = useSetRecoilState(authModalState);
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSignupForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+  const [error, setError] = useState("");
+  const [createUserWithEmailAndPassword, user, loading, userError] =
+    useCreateUserWithEmailAndPassword(auth);
 
   // firebase logic
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (error) setError("");
+    if (signupForm.password !== signupForm.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+    createUserWithEmailAndPassword(signupForm.email, signupForm.password);
   };
 
-  const setAuthModalState = useSetRecoilState(authModalState);
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSignupForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   return (
     <form onSubmit={onSubmit}>
@@ -64,7 +76,7 @@ const Signup: React.FC = () => {
       />
       <Input
         required
-        name="confirm password"
+        name="confirmPassword"
         placeholder="confirm password"
         type="password"
         mb={2}
@@ -80,7 +92,20 @@ const Signup: React.FC = () => {
         }}
         bg="gray.50"
       />
-      <Button width="100%" height="36px" type="submit" mb={2} mt={2}>
+      {error ||
+        (userError && (
+          <Text color="red" textAlign={"center"} fontSize={"10pt"}>
+            {error || userError.message}
+          </Text>
+        ))}
+      <Button
+        width="100%"
+        height="36px"
+        type="submit"
+        mb={2}
+        mt={2}
+        isLoading={loading}
+      >
         Sign Up
       </Button>
       <Flex fontSize="9pt" justifyContent="center">
