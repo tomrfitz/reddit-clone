@@ -5,7 +5,7 @@ const FIREBASE_ERRORS = {
   "Firebase: Error (auth/user-not-found).": "Invalid email or password",
   "Firebase: Error (auth/wrong-password).": "Invalid email or password",
   "Firebase: Password should be at least 6 characters (auth/weak-password).":
-    "Choose a stronger password.",
+    "Weak password! Choose a longer password.",
 };
 
 export default FIREBASE_ERRORS;
