@@ -1,15 +1,33 @@
 import { Community } from "@/src/atoms/communitiesAtom";
+import Header from "@/src/components/Community/Header";
+import CommunityNotFound from "@/src/components/Community/NotFound";
+import PageContent from "@/src/components/Layout/PageContent";
 import { firestore } from "@/src/firebase/clientApp";
 import { doc, getDoc } from "firebase/firestore";
 import { GetServerSidePropsContext } from "next";
 import React from "react";
+import safeJsonStringify from "safe-json-stringify";
 
 type CommunityPageProps = {
   communityData: Community;
 };
 
 const CommunityPage: React.FC<CommunityPageProps> = ({ communityData }) => {
-  return <div>welcome to {communityData.id}</div>;
+  if (!communityData) return <CommunityNotFound />;
+
+  return (
+    <>
+      <Header communtiyData={communityData} />
+      <PageContent>
+        <>
+          <div>left side</div>
+        </>
+        <>
+          <div>right side</div>
+        </>
+      </PageContent>
+    </>
+  );
 };
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
@@ -23,7 +41,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     return {
       props: {
-        communityData: communityDoc.data(),
+        communityData: communityDoc.exists()
+          ? JSON.parse(
+              safeJsonStringify({
+                id: communityDoc.id,
+                ...communityDoc.data(),
+              })
+            )
+          : "",
       },
     };
   } catch (error) {
