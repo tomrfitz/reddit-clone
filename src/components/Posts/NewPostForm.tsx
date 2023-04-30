@@ -1,4 +1,3 @@
-import { Post } from "@/src/atoms/postsAtom";
 import { firestore, storage } from "@/src/firebase/clientApp";
 import { Flex, Icon } from "@chakra-ui/react";
 import { User } from "firebase/auth";
@@ -56,8 +55,7 @@ const NewPostForm: React.FC<NewPostFormProps> = ({ user }) => {
     const displayName = user.displayName
       ? user.displayName
       : user.email!.split("@")[0];
-    const newPost: Post = {
-      id: textInputs.title,
+    const newPost = {
       communityId: communityId as string,
       creatorId: user.uid,
       creatorDisplayName: displayName as string,
