@@ -1,6 +1,7 @@
 import { Flex, Icon } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { IoDocumentText, IoImageOutline } from "react-icons/io5";
+import TextInputs from "./PostForm/TextInputs";
 import TabItem from "./TabItem";
 
 type NewPostFormProps = {};
@@ -26,6 +27,11 @@ export type tabItem = {
 
 const NewPostForm: React.FC<NewPostFormProps> = () => {
   const [selectedTab, setSelectedTab] = useState(formTabs[0].title);
+  const [textInputs, setTextInputs] = useState({
+    title: "",
+    postBody: "",
+  });
+  const [selectedFile, setSelectedFile] = useState<string>("");
 
   const handleCreatePost = async () => {};
 
@@ -45,6 +51,9 @@ const NewPostForm: React.FC<NewPostFormProps> = () => {
               setSelectedTab={setSelectedTab}
             />
           ))}
+        </Flex>
+        <Flex p={4}>
+          <TextInputs></TextInputs>
         </Flex>
       </Flex>
     </>
