@@ -1,11 +1,25 @@
+import { Post } from "@/src/atoms/postsAtom";
+import { firestore, storage } from "@/src/firebase/clientApp";
 import { Flex, Icon } from "@chakra-ui/react";
+import { User } from "firebase/auth";
+import {
+  Timestamp,
+  addDoc,
+  collection,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { IoDocumentText, IoImageOutline } from "react-icons/io5";
 import ImageUpload from "./PostForm/ImageUpload";
 import TextInputs from "./PostForm/TextInputs";
 import TabItem from "./TabItem";
 
-type NewPostFormProps = {};
+type NewPostFormProps = {
+  user: User;
+};
 
 const formTabs: tabItem[] = [
   {
@@ -26,7 +40,8 @@ export type tabItem = {
   icon: typeof Icon.arguments;
 };
 
-const NewPostForm: React.FC<NewPostFormProps> = () => {
+const NewPostForm: React.FC<NewPostFormProps> = ({ user }) => {
+  const router = useRouter();
   const [selectedTab, setSelectedTab] = useState(formTabs[0].title);
   const [textInputs, setTextInputs] = useState({
     title: "",
@@ -34,8 +49,42 @@ const NewPostForm: React.FC<NewPostFormProps> = () => {
   });
   const [selectedFile, setSelectedFile] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
 
-  const handleCreatePost = async () => {};
+  const handleCreatePost = async () => {
+    const { communityId } = router.query;
+    const displayName = user.displayName
+      ? user.displayName
+      : user.email!.split("@")[0];
+    const newPost: Post = {
+      id: textInputs.title,
+      communityId: communityId as string,
+      creatorId: user.uid,
+      creatorDisplayName: displayName as string,
+      title: textInputs.title,
+      body: textInputs.body,
+      nummberOfComments: 0,
+      voteStatus: 0,
+      createdAt: serverTimestamp() as Timestamp,
+    };
+    setLoading(true);
+    try {
+      const postDocRef = await addDoc(collection(firestore, "posts"), newPost);
+
+      if (selectedFile) {
+        const imageRef = ref(storage, `posts/${postDocRef.id}`);
+        await uploadString(imageRef, selectedFile, "data_url");
+        const downloadURL = await getDownloadURL(imageRef);
+
+        await updateDoc(postDocRef, {
+          imageURL: downloadURL,
+        });
+      }
+    } catch (error: any) {
+      setError(true);
+    }
+    setLoading(false);
+  };
 
   const onSelectImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const reader = new FileReader();
@@ -94,6 +143,17 @@ const NewPostForm: React.FC<NewPostFormProps> = () => {
             />
           )}
         </Flex>
+        {error && (
+          <Flex
+            p={4}
+            bg="red.500"
+            color="white"
+            borderRadius={4}
+            justifyContent="center"
+          >
+            Something went wrong. Please try again.
+          </Flex>
+        )}
       </Flex>
     </>
   );
