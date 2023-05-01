@@ -1,26 +1,60 @@
-import { Community } from "@/src/atoms/communitiesAtom";
+import { Community, communityState } from "@/src/atoms/communitiesAtom";
+import { auth, firestore, storage } from "@/src/firebase/clientApp";
+import useSelectFile from "@/src/hooks/useSelectFile";
 import {
   Box,
   Button,
   Divider,
   Flex,
   Icon,
+  Image,
   Link,
+  Spinner,
   Stack,
   Text,
 } from "@chakra-ui/react";
+import { getDownloadURL, ref, uploadString } from "@firebase/storage";
+import { doc, updateDoc } from "firebase/firestore";
 import moment from "moment";
-import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { FaReddit } from "react-icons/fa";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { RiCakeLine } from "react-icons/ri";
+import { useSetRecoilState } from "recoil";
 
 type AboutProps = {
   communityData: Community;
 };
 
 const About: React.FC<AboutProps> = ({ communityData }) => {
-  const router = useRouter();
+  const [user] = useAuthState(auth);
+  const selectedFileRef = React.useRef<HTMLInputElement>(null);
+  const { selectedFile, setSelectedFile, onSelectFile } = useSelectFile();
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const setCommunityStateValue = useSetRecoilState(communityState);
+
+  const onUpdateImage = async () => {
+    try {
+      if (!selectedFile) return;
+      setUploadingImage(true);
+      const imageRef = ref(storage, `communities/${communityData.id}/image`);
+      await uploadString(imageRef, selectedFile, "data_url");
+      const downloadURL = await getDownloadURL(imageRef);
+      await updateDoc(doc(firestore, "communities", communityData.id), {
+        imageURL: downloadURL,
+      });
+
+      setCommunityStateValue((prev) => ({
+        ...prev,
+        currentCommunity: {
+          imageURL: downloadURL,
+        } as Community,
+      }));
+    } catch (error) {}
+    setUploadingImage(false);
+  };
+
   return (
     <Box position={"sticky"} top={"14px"}>
       <Flex
@@ -61,11 +95,60 @@ const About: React.FC<AboutProps> = ({ communityData }) => {
               </Text>
             )}
           </Flex>
-          <Link href={`/r/${router.query.communityId}/submit`}>
+          <Link href={`/r/${communityData.id}/submit`}>
             <Button mt={3} height="30px">
               Create Post
             </Button>
           </Link>
+          {user?.uid === communityData.creatorId && (
+            <>
+              <Divider />
+              <Stack spacing={1} fontSize={"10pt"}>
+                <Text fontWeight={600}>Admin</Text>
+                <Flex align={"center"} justify={"space-between"}>
+                  <Text
+                    color={"blue.500"}
+                    cursor={"pointer"}
+                    _hover={{
+                      textDecoration: "underline",
+                    }}
+                    onClick={() => selectedFileRef.current?.click()}
+                  >
+                    Change Image
+                  </Text>
+                  {communityData.imageURL || selectedFile ? (
+                    <Image
+                      src={selectedFile || communityData.imageURL}
+                      borderRadius="full"
+                      boxSize="40px"
+                      alt="Community Image"
+                    />
+                  ) : (
+                    <Icon
+                      as={FaReddit}
+                      fontSize={40}
+                      color={"brand.100"}
+                      mr={2}
+                    />
+                  )}
+                </Flex>
+                {selectedFile &&
+                  (uploadingImage ? (
+                    <Spinner />
+                  ) : (
+                    <Text cursor={"pointer"} onClick={onUpdateImage}>
+                      Save Changes
+                    </Text>
+                  ))}
+                <input
+                  ref={selectedFileRef}
+                  type="file"
+                  hidden
+                  onChange={onSelectFile}
+                />
+              </Stack>
+            </>
+          )}
         </Stack>
       </Flex>
     </Box>
