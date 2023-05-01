@@ -35,7 +35,8 @@
     "react-icons": "^4.8.0",
     "recoil": "^0.7.7",
     "safe-json-stringify": "^1.2.0",
-    "typescript": "5.0.4"
+    "typescript": "5.0.4",
+    "vercel": "^29.0.3"
   },
   "devDependencies": {
     "eslint-config-google": "^0.14.0"
