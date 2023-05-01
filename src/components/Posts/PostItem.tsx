@@ -1,7 +1,16 @@
 import { Post } from "@/src/atoms/postsAtom";
-import { Flex, Icon, Image, Skeleton, Stack, Text } from "@chakra-ui/react";
+import {
+  Flex,
+  Icon,
+  Image,
+  Skeleton,
+  Spinner,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import moment from "moment";
-import React from "react";
+import React, { useState } from "react";
+import { AiOutlineDelete } from "react-icons/ai";
 import { BsChat } from "react-icons/bs";
 import {
   IoArrowDownCircleOutline,
@@ -16,8 +25,8 @@ type PostItemProps = {
   post: Post;
   userIsCreator: boolean;
   userVoteValue?: number;
-  onVote: () => void;
-  onDeletePost: () => void;
+  onVote: () => {};
+  onDeletePost: (post: Post) => Promise<boolean>;
   onSelectPost: () => void;
 };
 
@@ -29,7 +38,24 @@ const PostItem: React.FC<PostItemProps> = ({
   onDeletePost,
   onSelectPost,
 }) => {
-  const [loadingImage, setLoadingImage] = React.useState(true);
+  const [loadingImage, setLoadingImage] = useState(true);
+  const [error, setError] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
+
+  const handleDelete = async () => {
+    setLoadingDelete(true);
+    try {
+      const success = await onDeletePost(post);
+      if (!success) throw new Error("Failed to delete post");
+
+      console.log("Post successfully deleted");
+    } catch (error: any) {
+      console.log("Error deleting post", error.message);
+      setLoadingDelete(false);
+      setError(error.message);
+    }
+  };
+
   return (
     <>
       <Flex
@@ -144,17 +170,16 @@ const PostItem: React.FC<PostItemProps> = ({
                 borderRadius={4}
                 _hover={{ bg: "gray.200" }}
                 cursor="pointer"
-
-                // onClick={handleDelete}
+                onClick={handleDelete}
               >
-                {/* {loadingDelete ? (
+                {loadingDelete ? (
                   <Spinner size="sm" />
                 ) : (
                   <>
                     <Icon as={AiOutlineDelete} mr={2} />
                     <Text fontSize="9pt">Delete</Text>
                   </>
-                )} */}
+                )}
               </Flex>
             )}
           </Flex>
