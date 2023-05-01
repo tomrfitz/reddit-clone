@@ -100,6 +100,17 @@ const PostItem: React.FC<PostItemProps> = ({
           />
         </Flex>
         <Flex direction={"column"} width={"100%"}>
+          {error && (
+            <Flex
+              p={4}
+              bg="red.500"
+              color="white"
+              borderRadius={4}
+              justifyContent="center"
+            >
+              There was a problem deleting your post. Please try again.
+            </Flex>
+          )}
           <Stack spacing={1} p={"10px"}>
             <Stack
               direction={"row"}
