@@ -70,7 +70,7 @@ const NewPostForm: React.FC<NewPostFormProps> = ({ user }) => {
       const postDocRef = await addDoc(collection(firestore, "posts"), newPost);
 
       if (selectedFile) {
-        const imageRef = ref(storage, `posts/${postDocRef.id}`);
+        const imageRef = ref(storage, `posts/${postDocRef.id}/image`);
         await uploadString(imageRef, selectedFile, "data_url");
         const downloadURL = await getDownloadURL(imageRef);
 
