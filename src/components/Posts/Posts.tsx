@@ -48,7 +48,7 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
 
   useEffect(() => {
     getPosts();
-  });
+  }, [communityData]);
 
   return (
     <>
@@ -56,7 +56,7 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
         <PostLoader />
       ) : (
         <Stack>
-          {postStateValue.posts.map((post) => (
+          {postStateValue.posts.map((post: Post) => (
             <PostItem
               key={post.id}
               post={post}
