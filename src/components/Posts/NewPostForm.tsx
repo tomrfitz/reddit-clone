@@ -78,6 +78,7 @@ const NewPostForm: React.FC<NewPostFormProps> = ({ user }) => {
           imageURL: downloadURL,
         });
       }
+      router.back();
     } catch (error: any) {
       setError(true);
     }
