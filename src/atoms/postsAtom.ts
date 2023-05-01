@@ -8,7 +8,7 @@ export type Post = {
   creatorDisplayName: string;
   title: string;
   body: string;
-  nummberOfComments: number;
+  numberOfComments: number;
   voteStatus: number;
   createdAt: Timestamp;
   communityImageUrl?: string;
@@ -27,7 +27,7 @@ const defaultPostState: PostState = {
   // postVotes: {},
 };
 
-export const postsAtom = atom<PostState>({
+export const postState = atom<PostState>({
   key: "postsAtom",
   default: defaultPostState,
 });
