@@ -1,12 +1,26 @@
+import { communityState } from "@/src/atoms/communitiesAtom";
+import useDirectory from "@/src/hooks/useDirectory";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { Flex, Icon, Menu, MenuButton, MenuList, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Icon,
+  Image,
+  Menu,
+  MenuButton,
+  MenuList,
+  Text,
+} from "@chakra-ui/react";
 import React from "react";
-import { TiHome } from "react-icons/ti";
+import { useRecoilValue } from "recoil";
 import Communities from "./Communities";
 
 const UserMenu: React.FC = () => {
+  const { directoryState, toggleMenuOpen } = useDirectory();
+  const mySnippets = useRecoilValue(communityState).mySnippets;
+
   return (
-    <Menu>
+    <Menu isOpen={directoryState.isOpen}>
       <MenuButton
         cursor={"pointer"}
         padding="0px 6px"
@@ -17,6 +31,7 @@ const UserMenu: React.FC = () => {
           base: 0,
           md: 2,
         }}
+        onClick={() => toggleMenuOpen()}
       >
         <Flex
           align="center"
@@ -26,21 +41,34 @@ const UserMenu: React.FC = () => {
             lg: "200px",
           }}
         >
-          <Flex align="center">
-            <Icon
-              as={TiHome}
-              fontSize={24}
-              mr={{ base: 1, md: 2 }}
-              color="gray.400"
-            />
-            <Flex
-              display={{
-                base: "none",
-                lg: "flex",
-              }}
-            >
-              <Text fontSize="10pt">Home</Text>
-            </Flex>
+          <Flex alignItems="center">
+            <>
+              {directoryState.selectedMenuItem.imageURL ? (
+                <Image
+                  borderRadius="full"
+                  boxSize="24px"
+                  src={directoryState.selectedMenuItem.imageURL}
+                  mr={2}
+                  alt="community icon"
+                />
+              ) : (
+                <Icon
+                  fontSize={24}
+                  mr={{ base: 1, md: 2 }}
+                  color={directoryState.selectedMenuItem.iconColor}
+                  as={directoryState.selectedMenuItem.icon}
+                />
+              )}
+              <Box
+                display={{ base: "none", lg: "flex" }}
+                flexDirection="column"
+                fontSize="10pt"
+              >
+                <Text fontWeight={600}>
+                  {directoryState.selectedMenuItem.displayText}
+                </Text>
+              </Box>
+            </>
           </Flex>
           <ChevronDownIcon />
         </Flex>
