@@ -64,7 +64,7 @@ const UserMenu: React.FC = () => {
                 flexDirection="column"
                 fontSize="10pt"
               >
-                <Text fontWeight={600}>
+                <Text fontWeight={600} pt={1}>
                   {directoryState.selectedMenuItem.displayText}
                 </Text>
               </Box>

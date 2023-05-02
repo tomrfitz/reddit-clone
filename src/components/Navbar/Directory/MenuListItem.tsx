@@ -1,5 +1,5 @@
 import useDirectory from "@/src/hooks/useDirectory";
-import { Flex, Icon, Image, MenuItem } from "@chakra-ui/react";
+import { Flex, Icon, Image, MenuItem, Text } from "@chakra-ui/react";
 import React from "react";
 import { IconType } from "react-icons";
 
@@ -40,7 +40,7 @@ const MenuListItem: React.FC<MenuListItemProps> = ({
         ) : (
           <Icon fontSize={20} mr={2} as={icon} color={iconColor} />
         )}
-        {displayText}
+        <Text>{displayText}</Text>
       </Flex>
     </MenuItem>
   );
