@@ -24,9 +24,11 @@ const usePosts = () => {
   const setAuthModalState = useSetRecoilState(authModalState);
   const router = useRouter();
 
-  if (!user?.uid) {
-    setAuthModalState({ isOpen: true, view: "login" });
-  }
+  useEffect(() => {
+    if (!user?.uid) {
+      setAuthModalState({ isOpen: true, view: "login" });
+    }
+  }, []);
 
   const onVote = async (
     event: React.MouseEvent<SVGElement, MouseEvent>,
