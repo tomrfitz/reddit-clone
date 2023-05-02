@@ -139,6 +139,16 @@ const usePosts = () => {
     getCommunityPostVotes(currentCommunity?.id);
   }, [currentCommunity, user]);
 
+  useEffect(() => {
+    if (!user) {
+      setPostStateValue((prev) => ({
+        ...prev,
+        postVotes: [],
+      }));
+      return;
+    }
+  }, [user]);
+
   return {
     postStateValue,
     setPostStateValue,
