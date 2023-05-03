@@ -51,6 +51,7 @@ export default function SmallWithSocial() {
       position={"absolute"}
       bottom={"0"}
       width={"100vw"}
+      maxHeight={"150px"}
     >
       <Container
         as={Stack}
