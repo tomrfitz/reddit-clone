@@ -1,4 +1,5 @@
 import { auth, firestore } from "@/src/firebase/clientApp";
+import useDirectory from "@/src/hooks/useDirectory";
 import {
   Box,
   Button,
@@ -17,6 +18,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { doc, runTransaction, serverTimestamp } from "firebase/firestore";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { BsFillEyeFill, BsFillPersonFill } from "react-icons/bs";
@@ -37,6 +39,8 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
   const [communityType, setCommunityType] = useState("public");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { toggleMenuOpen } = useDirectory();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length > 21) return;
@@ -84,6 +88,11 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
           }
         );
       });
+
+      handleClose();
+      toggleMenuOpen();
+      // TODO - fix /r/r/communityName bug
+      router.push(`r/${communityName}`);
     } catch (error: any) {
       console.log("handleCreateCommunity error: ", error);
       setError(error.message);
