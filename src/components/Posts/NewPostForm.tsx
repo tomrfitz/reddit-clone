@@ -19,6 +19,7 @@ import TabItem from "./TabItem";
 
 type NewPostFormProps = {
   user: User;
+  communityImageURL?: string | undefined;
 };
 
 const formTabs: tabItem[] = [
@@ -40,7 +41,10 @@ export type tabItem = {
   icon: typeof Icon.arguments;
 };
 
-const NewPostForm: React.FC<NewPostFormProps> = ({ user }) => {
+const NewPostForm: React.FC<NewPostFormProps> = ({
+  user,
+  communityImageURL,
+}) => {
   const router = useRouter();
   const [selectedTab, setSelectedTab] = useState(formTabs[0].title);
   const [textInputs, setTextInputs] = useState({
@@ -58,6 +62,7 @@ const NewPostForm: React.FC<NewPostFormProps> = ({ user }) => {
       : user.email!.split("@")[0];
     const newPost = {
       communityId: communityId as string,
+      communityImageURL: communityImageURL || "",
       creatorId: user.uid,
       creatorDisplayName: displayName as string,
       title: textInputs.title,
