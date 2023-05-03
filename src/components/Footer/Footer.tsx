@@ -36,6 +36,8 @@ const SocialButton = ({
       _hover={{
         bg: useColorModeValue("blackAlpha.200", "whiteAlpha.200"),
       }}
+      target="_blank"
+      rel="noopener noreferrer"
     >
       <VisuallyHidden>{label}</VisuallyHidden>
       {children}
