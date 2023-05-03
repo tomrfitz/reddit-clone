@@ -54,6 +54,7 @@ export const useCommunityData = () => {
       setCommunityStateValue((prevState) => ({
         ...prevState,
         mySnippets: snippets as CommunitySnippet[],
+        snippetsFetched: true,
       }));
     } catch (error: any) {
       setError(error.message);
@@ -151,6 +152,7 @@ export const useCommunityData = () => {
       setCommunityStateValue((prevState) => ({
         ...prevState,
         mySnippets: [],
+        snippetsFetched: false,
       }));
       return;
     }
