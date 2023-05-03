@@ -26,8 +26,8 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
   const [error, setError] = React.useState<string>("");
 
   const getPosts = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
       const postsQuery = query(
         collection(firestore, "posts"),
         where("communityId", "==", communityData.id),
