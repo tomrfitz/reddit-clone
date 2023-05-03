@@ -10,6 +10,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     <>
       <Navbar />
       <main>{children}</main>
+      {/* <Footer /> */}
     </>
   );
 };
