@@ -62,10 +62,11 @@ export default function SmallWithSocial() {
       >
         <Grid
           templateColumns={{ md: "repeat(4, 1fr)", base: "repeat(2, 2fr)" }}
+          fontSize={"11pt"}
           gap={1}
           alignSelf={"right"}
         >
-          <Text justifySelf={"right"} pt={1}>
+          <Text justifySelf={"right"} pt={1.5} mr={1}>
             Made by Thomas FitzGerald. Find me here:
           </Text>
           <Stack
@@ -89,7 +90,7 @@ export default function SmallWithSocial() {
               <FaBriefcase />
             </SocialButton>
           </Stack>
-          <Text justifySelf={"right"} pt={1}>
+          <Text justifySelf={"right"} pt={1.5} mr={1}>
             Tutorial by Shadhee Merhi. Find it here:
           </Text>
           <Stack
