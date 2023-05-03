@@ -67,7 +67,11 @@ export default function SmallWithSocial() {
           <Text justifySelf={"right"} pt={1}>
             Made by Thomas FitzGerald. Find me here:
           </Text>
-          <Stack direction={"row"} spacing={3}>
+          <Stack
+            direction={"row"}
+            spacing={3}
+            justify={{ base: "center", md: "inherit" }}
+          >
             <SocialButton
               label={"Twitter"}
               href={"https://twitter.com/tomr_fitz"}
@@ -87,7 +91,11 @@ export default function SmallWithSocial() {
           <Text justifySelf={"right"} pt={1}>
             Tutorial by Shadhee Merhi. Find it here:
           </Text>
-          <Stack direction={"row"} spacing={3}>
+          <Stack
+            direction={"row"}
+            spacing={3}
+            justify={{ base: "center", md: "inherit" }}
+          >
             <SocialButton
               label={"YouTube"}
               href={
