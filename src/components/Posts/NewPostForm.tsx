@@ -17,11 +17,6 @@ import ImageUpload from "./PostForm/ImageUpload";
 import TextInputs from "./PostForm/TextInputs";
 import TabItem from "./TabItem";
 
-type NewPostFormProps = {
-  user: User;
-  communityImageURL?: string | undefined;
-};
-
 const formTabs: tabItem[] = [
   {
     key: "post",
@@ -39,6 +34,11 @@ export type tabItem = {
   key: string;
   title: string;
   icon: typeof Icon.arguments;
+};
+
+type NewPostFormProps = {
+  user: User;
+  communityImageURL?: string | undefined;
 };
 
 const NewPostForm: React.FC<NewPostFormProps> = ({
