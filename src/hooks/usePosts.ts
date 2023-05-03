@@ -37,6 +37,10 @@ const usePosts = () => {
     communityId: string
   ) => {
     event.stopPropagation();
+    if (!user?.uid) {
+      setAuthModalState({ isOpen: true, view: "login" });
+      return;
+    }
     try {
       const { voteStatus } = post;
       const existingVote = postStateValue.postVotes.find(
