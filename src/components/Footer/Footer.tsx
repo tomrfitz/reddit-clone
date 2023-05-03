@@ -2,13 +2,14 @@ import {
   Box,
   chakra,
   Container,
+  Grid,
   Stack,
   Text,
   useColorModeValue,
   VisuallyHidden,
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
-import { FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
+import { FaBriefcase, FaGithub, FaTwitter, FaYoutube } from "react-icons/fa";
 
 const SocialButton = ({
   children,
@@ -49,34 +50,60 @@ export default function SmallWithSocial() {
       color={useColorModeValue("gray.700", "gray.200")}
       position={"absolute"}
       bottom={"0"}
-      width={"100%"}
-      maxHeight={"60px"}
-      height={"60px"}
+      width={"100vw"}
     >
       <Container
         as={Stack}
-        maxW={"6xl"}
-        py={4}
-        direction={{ base: "column", md: "row" }}
+        maxW={"95vw"}
+        py={2.5}
         spacing={4}
         justify={{ base: "center", md: "space-between" }}
-        align={{ base: "center", md: "center" }}
       >
-        <Text>© 2022 Chakra Templates. All rights reserved.</Text>
-        <Stack direction={"row"} spacing={6}>
-          <SocialButton
-            label={"Twitter"}
-            href={"https://twitter.com/tomr_fitz"}
-          >
-            <FaTwitter />
-          </SocialButton>
-          <SocialButton label={"YouTube"} href={"#"}>
-            <FaYoutube />
-          </SocialButton>
-          <SocialButton label={"Instagram"} href={"#"}>
-            <FaInstagram />
-          </SocialButton>
-        </Stack>
+        <Grid
+          templateColumns={{ md: "repeat(4, 1fr)", base: "repeat(2, 2fr)" }}
+          gap={1}
+          alignSelf={"right"}
+        >
+          <Text justifySelf={"right"} pt={1}>
+            Made by Thomas FitzGerald. Find me here:
+          </Text>
+          <Stack direction={"row"} spacing={3}>
+            <SocialButton
+              label={"Twitter"}
+              href={"https://twitter.com/tomr_fitz"}
+            >
+              <FaTwitter />
+            </SocialButton>
+            <SocialButton
+              label={"Github"}
+              href={"https://github.com/tomrfitz/reddit-clone"}
+            >
+              <FaGithub />
+            </SocialButton>
+            <SocialButton label={"Portfolio"} href={"https://tomrfitz.com"}>
+              <FaBriefcase />
+            </SocialButton>
+          </Stack>
+          <Text justifySelf={"right"} pt={1}>
+            Tutorial by Shadhee Merhi. Find it here:
+          </Text>
+          <Stack direction={"row"} spacing={3}>
+            <SocialButton
+              label={"YouTube"}
+              href={
+                "https://youtube.com/playlist?list=PLu3PzwcGv6t7Xygj1GLM5DMKihUG2a92Y"
+              }
+            >
+              <FaYoutube />
+            </SocialButton>
+            <SocialButton
+              label={"Github"}
+              href={"https://github.com/shadeemerhi/reddit-clone-yt"}
+            >
+              <FaGithub />
+            </SocialButton>
+          </Stack>
+        </Grid>
       </Container>
     </Box>
   );
