@@ -148,11 +148,11 @@ const Recommendations: React.FC = () => {
                 </Link>
               );
             })}
-            <Box p="10px 20px">
+            {/* <Box p="10px 20px">
               <Button height="30px" width="100%">
                 View All
               </Button>
-            </Box>
+            </Box> */}
           </>
         )}
       </Flex>
