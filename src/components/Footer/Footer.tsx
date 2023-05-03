@@ -48,12 +48,11 @@ const SocialButton = ({
 export default function SmallWithSocial() {
   return (
     <Box
-      bg={useColorModeValue("gray.50", "gray.900")}
-      color={useColorModeValue("gray.700", "gray.200")}
       position={"absolute"}
       bottom={"0"}
       width={"100vw"}
       maxHeight={"150px"}
+      bgColor={"white"}
     >
       <Container
         as={Stack}
